@@ -41,7 +41,7 @@ def update_feed(request):
             story = Story(link = entry.id, title = entry.title, byline = entry.author, updated_date = datetime.datetime.fromtimestamp(time.mktime(entry.updated_parsed)))
             story.put()
         author_query = Author.all()
-        author = author_query.filter('name =', entry.author).get()
+        author = author_query.filter('slug =', str(slugify(entry.author))).get()
         if author:
             author.story_count += 1
             if story.updated_date > author.last_updated:
