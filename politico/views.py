@@ -40,15 +40,15 @@ def update_feed(request):
         if not story:
             story = Story(link = entry.id, title = entry.title, byline = entry.author, updated_date = datetime.datetime.fromtimestamp(time.mktime(entry.updated_parsed)))
             story.put()
-            author_query = Author.all()
-            author = author_query.filter('name = ', entry.author).get()
-            if author:
-                author.story_count += 1
-                if story.updated_date > author.last_updated:
-                    author.last_updated = story.updated_date
-                author.save
-            else:
-                author = Author(name = entry.author, slug = str(slugify(entry.author)), story_count = 1, last_updated = story.updated_date)
-                author.put()
+        author_query = Author.all()
+        author = author_query.filter('name =', entry.author).get()
+        if author:
+            author.story_count += 1
+            if story.updated_date > author.last_updated:
+                author.last_updated = story.updated_date
+                author.save()
+        else:
+            author = Author(name = entry.author, slug = str(slugify(entry.author)), story_count = 1, last_updated = story.updated_date)
+            author.put()
     return HttpResponse('ok!')
 
