@@ -41,14 +41,16 @@ def update_feed(request):
             story = Story(link = entry.id, title = entry.title, byline = entry.author, updated_date = datetime.datetime.fromtimestamp(time.mktime(entry.updated_parsed)))
             story.put()
         author_query = Author.all()
-        author = author_query.filter('slug =', str(slugify(entry.author))).get()
-        if author:
-            author.story_count += 1
-            if story.updated_date > author.last_updated:
-                author.last_updated = story.updated_date
-                author.save()
-        else:
-            author = Author(name = entry.author, slug = str(slugify(entry.author)), story_count = 1, last_updated = story.updated_date)
-            author.put()
+        authors = story.byline.split(',')
+        for author in authors:
+            a = author_query.filter('slug =', str(slugify(author))).get()
+            if a:
+                a.story_count += 1
+                if story.updated_date > a.last_updated:
+                    a.last_updated = story.updated_date
+                    a.save()
+            else:
+                a = Author(name = author, slug = str(slugify(author)), story_count = 1, last_updated = story.updated_date)
+                a.put()
     return HttpResponse('ok!')
 
