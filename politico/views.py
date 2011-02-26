@@ -2,10 +2,11 @@ import StringIO
 import datetime
 import time
 from google.appengine.api.labs import taskqueue
-from politico.models import Story
+from politico.models import Story, Author
 from google.appengine.api.urlfetch import fetch
 from toolbox import feedparser
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.template.defaultfilters import slugify
 
 feeds = ['http://feeds.politico.com/politico/rss/congress', 'http://www.politico.com/rss/life.xml', 'http://www.politico.com/rss/lobbyists.xml',
 'http://www.politico.com/rss/pitboss.xml', 'http://www.politico.com/rss/politics.xml', 'http://www.politico.com/rss/2012-election.xml', 
@@ -17,6 +18,11 @@ feeds = ['http://feeds.politico.com/politico/rss/congress', 'http://www.politico
 'http://www.politico.com/rss/davidcatanese.xml', 'http://www.politico.com/rss/laurarozen.xml', 'http://www.politico.com/rss/glennthrush.xml', 
 'http://www.politico.com/rss/onmedia.xml', 'http://www.politico.com/rss/joshgerstein.xml', 'http://www.politico.com/rss/maggiehaberman.xml', 
 'http://www.politico.com/rss/arena/arenatop10.xml', 'http://www.politico.com/rss/Politico44box.xml', 'http://www.politico.com/rss/livepulse.xml']
+
+def index(request):
+    return 
+    
+
 
 def fetch_feeds(request):
     for url in feeds:
@@ -34,5 +40,15 @@ def update_feed(request):
         if not story:
             story = Story(link = entry.id, title = entry.title, byline = entry.author, updated_date = datetime.datetime.fromtimestamp(time.mktime(entry.updated_parsed)))
             story.put()
+            author_query = Author.all()
+            author = author_query.filter('name = ', entry.author).get()
+            if author:
+                author.story_count += 1
+                if story.updated_date > author.last_updated:
+                    author.last_updated = story.updated_date
+                author.save
+            else:
+                author = Author(name = entry.author, slug = str(slugify(entry.author)), story_count = 1, last_updated = story.updated_date)
+                author.put()
     return HttpResponse('ok!')
 

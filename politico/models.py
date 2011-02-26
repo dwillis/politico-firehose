@@ -12,3 +12,15 @@ class Story(BaseModel):
         
     def get_url(self):
         return self.link
+
+class Author(BaseModel):
+    name = db.StringProperty()
+    slug = db.StringProperty()
+    story_count = db.IntegerProperty()
+    last_updated = db.DateTimeProperty()
+    
+    def __unicode__(self):
+        return self.name
+    
+
+    
