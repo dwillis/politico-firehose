@@ -16,8 +16,7 @@ feeds = ['http://feeds.politico.com/politico/rss/congress', 'http://www.politico
 'http://www.politico.com/rss/politicopicks.xml', 'http://www.politico.com/rss/Top10Blogs.xml', 'http://www.politico.com/rss/bensmith.xml',
 'http://www.politico.com/rss/davidcatanese.xml', 'http://www.politico.com/rss/laurarozen.xml', 'http://www.politico.com/rss/glennthrush.xml', 
 'http://www.politico.com/rss/onmedia.xml', 'http://www.politico.com/rss/joshgerstein.xml', 'http://www.politico.com/rss/maggiehaberman.xml', 
-'http://www.politico.com/rss/polls.xml', 'http://www.politico.com/rss/arena/arenatop10.xml', 'http://www.politico.com/rss/Politico44box.xml', 
-'http://www.politico.com/rss/livepulse.xml']
+'http://www.politico.com/rss/arena/arenatop10.xml', 'http://www.politico.com/rss/Politico44box.xml', 'http://www.politico.com/rss/livepulse.xml']
 
 def fetch_feeds(request):
     for url in feeds:
