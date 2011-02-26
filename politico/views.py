@@ -35,12 +35,12 @@ def update_feed(request):
     content = fetch(url).content
     d = feedparser.parse(StringIO.StringIO(content))
     for entry in d.entries:
-        query = Story.all()
-        story = query.filter('link =', entry.id).get()
+        story_query = Story.all()
+        author_query = Author.all()
+        story = story_query.filter('link =', entry.id).get()
         if not story:
             story = Story(link = entry.id, title = entry.title, byline = entry.author, updated_date = datetime.datetime.fromtimestamp(time.mktime(entry.updated_parsed)))
             story.put()
-        author_query = Author.all()
         authors = story.byline.split(',')
         for author in authors:
             a = author_query.filter('slug =', str(slugify(author))).get()
