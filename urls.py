@@ -16,6 +16,7 @@ from django.conf.urls.defaults import *
 from politico.views import *
 
 urlpatterns = patterns('',
+    url('^$', index),
     url('^_update_feed/$', update_feed),
     url('^_update_all_feeds/$', fetch_feeds),
     

@@ -1,12 +1,11 @@
 import StringIO
-import datetime
-import time
 from google.appengine.api.labs import taskqueue
 from politico.models import Story, Author
 from google.appengine.api.urlfetch import fetch
 from toolbox import feedparser
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
+from django.views.generic.simple import direct_to_template
 from django.template.defaultfilters import slugify
 
 feeds = ['http://feeds.politico.com/politico/rss/congress', 'http://www.politico.com/rss/life.xml', 'http://www.politico.com/rss/lobbyists.xml',
@@ -21,7 +20,12 @@ feeds = ['http://feeds.politico.com/politico/rss/congress', 'http://www.politico
 'http://www.politico.com/rss/Politico44box.xml', 'http://www.politico.com/rss/livepulse.xml']
 
 def index(request):
-    return HttpResponse("nothing to see here. yet.")
+    latest_stories = Story.all().order('-updated_date').fetch(25)
+    context = {
+        'headline': "Winning the present",
+        'object_list': latest_stories,
+    }
+    return direct_to_template(request, 'index.html', context)
 
 
 def fetch_feeds(request):
@@ -36,13 +40,13 @@ def update_feed(request):
     d = feedparser.parse(StringIO.StringIO(content))
     for entry in d.entries:
         story_query = Story.all()
-        author_query = Author.all()
         story = story_query.filter('link =', entry.id).get()
         if not story:
             story = Story(link = entry.id, title = entry.title, byline = entry.author, updated_date = datetime.datetime.fromtimestamp(time.mktime(entry.updated_parsed)))
             story.put()
         authors = story.byline.split(',')
         for author in authors:
+            author_query = Author.all()
             a = author_query.filter('slug =', str(slugify(author))).get()
             if a:
                 a.story_count += 1
