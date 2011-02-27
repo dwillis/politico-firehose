@@ -1,0 +1,36 @@
+<html>
+  <title>Politico Firehose</title>
+  <link href="/media/blueprint/screen.css" media="screen, projection", rel="stylesheet", type="text/css">
+  <body>
+	<div class="container">
+		<hr>
+	  <div class="span-24">
+      {% block headline %}
+
+      <h1>{{ headline|safe }} :: The Politico Firehose</h1>
+      {% endblock %}
+
+      {% block content %}
+          <table id="table_list" cellspacing="0">
+              <tbody>
+                  {% for obj in object_list %}
+                  <tr id="{{ obj.link }}">
+                      <td style="{% if not forloop.first %}border-top: 1px dotted gray;{% endif %}{% if forloop.last %}border-bottom: 1px dotted gray;{% endif %}">
+                          <h2><a target="_blank" class="headline" href="{{ obj.link }}">{{ obj|safe }}</a></h2>
+                          <span class="byline">By&nbsp;{{ obj.byline }}</span>
+                          <span class="pubdate">{{ obj.updated_local|time:"h:i a" }}</span>
+                          <p class="description"></p>
+                      </td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      {% endblock %}
+      <div id="footer" class="span-24 last" style="padding:10px 0; font-size:12px;">  
+            {% block footer %}
+            <center>Made with <a href="http://appengine.google.com/">Google App Engine</a> and scorn.</center>
+            {% endblock %}
+      </div>
+  </body>
+</html>
+
