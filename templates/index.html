@@ -18,7 +18,7 @@
                       <td style="{% if not forloop.first %}border-top: 1px dotted gray;{% endif %}{% if forloop.last %}border-bottom: 1px dotted gray;{% endif %}">
                           <h2><a target="_blank" class="headline" href="{{ obj.link }}">{{ obj|safe }}</a></h2>
                           <span class="byline">By&nbsp;{{ obj.byline }}</span>
-                          <span class="pubdate">{{ obj.updated_local|time:"h:i a" }}</span>
+                          <span class="pubdate">{{ obj.updated_local|date:"N d" }} at {{ obj.updated_local|time:"h:i a" }}</span>
                           <p class="description"></p>
                       </td>
                   </tr>
