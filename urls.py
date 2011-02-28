@@ -12,12 +12,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Views
+from politico.views import update_feed, fetch_feeds, index
+
+# Feeds
+from politico.feeds import LatestItems
+from django.contrib.syndication.views import feed
+
+# Urls
 from django.conf.urls.defaults import *
-from politico.views import *
 
 urlpatterns = patterns('',
+    # Homepage
     url('^$', index),
+    # RSSy Feeds
+    url(r'^feeds/(?P<url>.*)/$', feed,
+        {'feed_dict': dict(latest=LatestItems) },
+        name='feeds'),
+    # Tasks
     url('^_update_feed/$', update_feed),
     url('^_update_all_feeds/$', fetch_feeds),
-    
 )

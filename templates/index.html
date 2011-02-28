@@ -1,13 +1,20 @@
 <html>
   <title>Politico Firehose</title>
   <link href="/media/blueprint/screen.css" media="screen, projection", rel="stylesheet", type="text/css">
+  <link rel="alternate" type="application/rss+xml" 
+    title="Latest stories from the Politico Firehose" 
+    href="{% url feeds "latest" %}" />
   <body>
-	<div class="container">
-		<hr>
-	  <div class="span-24">
+    <div class="container">
+        <hr>
+      <div class="span-24">
       {% block headline %}
-
-      <h1>{{ headline|safe }} :: The Politico Firehose</h1>
+       <div style="float:right;">
+            <a href="{% url feeds "latest" %}">
+                <img src="{{ MEDIA_URL }}img/rss.gif">
+            </a>
+        </div>
+       <h1>{{ headline|safe }} :: The Politico Firehose</h1>
       {% endblock %}
 
       {% block content %}
