@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Views
-from politico.views import update_feed, fetch_feeds, index
+from politico.views import update_feed, fetch_feeds, index, byline_detail
 
 # Feeds
 from politico.feeds import LatestItems
@@ -25,6 +25,10 @@ from django.conf.urls.defaults import *
 urlpatterns = patterns('',
     # Homepage
     url('^$', index),
+    
+    # Bylines
+    url('^bylines/(?P<slug>.*)/$', byline_detail),
+    
     # RSSy Feeds
     url(r'^feeds/(?P<url>.*)/$', feed,
         {'feed_dict': dict(latest=LatestItems) },
