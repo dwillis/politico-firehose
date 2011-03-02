@@ -32,7 +32,7 @@ def byline_detail(request, slug):
     context = {
         'author' : author,
         'headline': "Article Archive",
-        'object_list': author.stories,
+        'object_list': author.story_list,
     }
     return direct_to_template(request, 'byline_detail.html', context)
     

@@ -16,7 +16,7 @@ class Author(BaseModel):
         return "/bylines/%s" % self.slug
     
     def story_list(self):
-        return [x.story for x in sorted(author.stories)]
+        return [x.story for x in sorted(self.stories)]
     
     def updated_local(self):
         return self.last_updated - timedelta(hours=5)
