@@ -17,8 +17,8 @@ from politico import views
 from politico import tasks
 
 # Feeds
-from politico.feeds import LatestItems
-from django.contrib.syndication.views import feed
+from politico import feeds
+from django.contrib.syndication.views import feed as feed_view
 
 # Urls
 from django.conf.urls.defaults import *
@@ -31,8 +31,8 @@ urlpatterns = patterns('',
     url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds
-    url(r'^feeds/(?P<url>.*)/$', feed,
-        {'feed_dict': dict(latest=LatestItems) },
+    url(r'^feeds/(?P<url>.*)/$', feed_view,
+        {'feed_dict': dict(latest=feeds.LatestStories) },
         name='feeds'),
     
     # Tasks
