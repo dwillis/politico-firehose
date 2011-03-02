@@ -3,7 +3,7 @@
   {% block headline %}
    <h1>{{ author.name }} :: {{ headline|safe }} :: The Politico Firehose</h1>
    <h3>{{ author.get_story_count }} stories since we've been tracking</h3>
-   <h4>It has been {{ author.updated_local|timesince:now }} since {{ author.name }}'s last appearance.</h4>
+   <h4>It has been {{ author.updated_local|timesince:now }} and counting since {{ author.name }}'s last appearance.</h4>
   {% endblock %}
 
   {% block content %}
