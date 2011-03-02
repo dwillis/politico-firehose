@@ -6,7 +6,7 @@ from google.appengine.api.urlfetch import fetch
 import StringIO
 
 # Models
-from politico.models import Story, Author, AuthorStory
+from politico.models import Story, Author
 
 # Etc.
 import time
@@ -45,29 +45,24 @@ def update_feed(request):
         story = story_query.filter('link =', entry.id).get()
         # And if it doesn't ...
         if not story:
-            # Prep the authors
-            authors = entry.author.split(',')
-            if len(authors) > 1:
-                multi_byline = True
-            else:
-                multi_byline = False
             # Create a new Story object
             story = Story(
                 link = entry.id,
                 title = entry.title,
                 updated_date = datetime.fromtimestamp(time.mktime(entry.updated_parsed)), 
-                multi_byline = multi_byline
             )
             # Save it
             story.put()
+            # Prep the authors
+            authors = entry.author.split(',')
+            author_keys = []
             # Loop through the authors
             for author in authors:
                 # Check if the author already exists
-                a = author_query.filter('slug =', str(slugify(author))).get()
+                this_slug = str(slugify(author))
+                a = Author.get_by_key_name(this_slug)
                 # If it does...
                 if a:
-                    # Update the count
-                    a.story_count += 1
                     # Synce updates
                     if story.updated_date > a.last_updated:
                         a.last_updated = story.updated_date
@@ -76,12 +71,16 @@ def update_feed(request):
                 else:
                     # Create a new Author obj
                     a = Author(
+                        key_name = this_slug,
                         name = author,
-                        slug = str(slugify(author)),
+                        slug = this_slug,
                         story_count = 1,
                         last_updated = story.updated_date
                     )
                     a.put()
-                # Then always create an M2M link between the Author and the Story.
-                AuthorStory(author=a, story=story).put()
+                # Add this to the Author key list
+                author_keys.append(a.key())
+            # Add the author keys to the story object
+            story.bylines = author_keys
+            story.put()
     return HttpResponse('ok!')

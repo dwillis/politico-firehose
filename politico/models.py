@@ -16,11 +16,21 @@ class Author(BaseModel):
     def __unicode__(self):
         return self.name
         
-    def story_list(self):
-        return (x.story for x in self.authorstory_set)
-        
-    def get_absolute_url(self):
+    def get_url(self):
         return "/bylines/%s" % self.slug
+    
+    def get_story_list(self):
+        """
+        Get all the stories written by this author
+        """
+        from politico.models import Story
+        return Story.all().filter('bylines =', self.key()).order("-updated_date")
+
+    def get_story_count(self):
+        """
+        Count all the stories written by this Author.
+        """
+        return self.get_story_list().count()
 
 
 class Story(BaseModel):
@@ -30,7 +40,7 @@ class Story(BaseModel):
     title = db.StringProperty()
     link = db.StringProperty()
     updated_date = db.DateTimeProperty()
-    multi_byline = db.BooleanProperty()
+    bylines = db.ListProperty(db.Key, default=None)
     
     def __unicode__(self):
         return self.title
@@ -41,15 +51,22 @@ class Story(BaseModel):
     def updated_local(self):
         return self.updated_date - timedelta(hours=5)
         
-    def author_list(self):
-        return (x.author.name for x in self.authorstory_set)
-
-
-class AuthorStory(BaseModel):
-    """
-    The many-to-many relationship bewtween Stories and Authors.
-    """
-    author = db.ReferenceProperty(Author, required=True, collection_name="stories")
-    story = db.ReferenceProperty(Story, required=True, collection_name="authors")
+    def get_byline_list(self):
+        """
+        Return all the Authors associated with this story.
+        """
+        return db.get(self.bylines)
+    
+    def get_rendered_byline_html(self):
+        """
+        Return a pretty HTML link list of all the Authors in the bylines.
+        """
+        from django.utils.text import get_text_list
+        author_list = self.get_byline_list()
+        author_list.sort(key=lambda x: x.name)
+        return get_text_list([
+            '<a href="%s">%s</a>' % (i.get_url(), i.name) for i in author_list
+        ], 'and')
+    
 
 

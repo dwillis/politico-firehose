@@ -22,13 +22,12 @@ def byline_detail(request, slug):
     """
     A page with everything written by one of the Authors.
     """
-    author = Author.all().filter('slug =', slug).get()
+    author = Author.get_by_key_name(slug)
     if not author:
         raise Http404
     context = {
         'author' : author,
         'headline': "Article Archive",
-        'object_list': author.stories,
     }
     return direct_to_template(request, 'byline_detail.html', context)
     
