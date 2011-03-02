@@ -12,11 +12,14 @@ class Author(BaseModel):
     def __unicode__(self):
         return self.name
         
-    def story_list(self):
-        return (x.story for x in self.authorstory_set)
-        
     def get_absolute_url(self):
         return "/bylines/%s" % self.slug
+    
+    def story_list(self):
+        return [x.story for x in sorted(author.stories)]
+    
+    def updated_local(self):
+        return self.last_updated - timedelta(hours=5)
 
 class Story(BaseModel):
     title = db.StringProperty()
@@ -32,9 +35,6 @@ class Story(BaseModel):
     
     def updated_local(self):
         return self.updated_date - timedelta(hours=5)
-        
-    def author_list(self):
-        return (x.author.name for x in self.authorstory_set)
     
 class AuthorStory(BaseModel):
     author = db.ReferenceProperty(Author, required=True, collection_name="stories")
