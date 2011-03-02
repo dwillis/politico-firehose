@@ -1,45 +1,28 @@
-<html>
-  <title>Politico Firehose</title>
-  <link href="/media/blueprint/screen.css" media="screen, projection", rel="stylesheet", type="text/css">
-  <link rel="alternate" type="application/rss+xml" 
-    title="Latest stories from the Politico Firehose" 
-    href="{% url feeds "latest" %}" />
-  <body>
-    <div class="container">
-        <hr>
-      <div class="span-24">
-      {% block headline %}
-       <div style="float:right;">
-            <a href="{% url feeds "latest" %}">
-                <img src="{{ MEDIA_URL }}img/rss.gif">
-            </a>
-        </div>
-       <h1>{{ author.name }} :: {{ headline|safe }} :: The Politico Firehose</h1>
-       <h3>{{ author.story_count }} stories since we've been tracking</h3>
-       <h4>Last story posted on {{ author.updated_local|date:"N d" }} at {{ author.updated_local|time:"h:i a" }}</h4>
-      {% endblock %}
+{% extends "base.html" %}
 
-      {% block content %}
-          <table id="table_list" cellspacing="0">
-              <tbody>
-                  {% for obj in object_list %}
-                  <tr id="{{ obj.link }}">
-                      <td style="{% if not forloop.first %}border-top: 1px dotted gray;{% endif %}{% if forloop.last %}border-bottom: 1px dotted gray;{% endif %}">
-                          <h2><a target="_blank" class="headline" href="{{ obj.link }}">{{ obj|safe }}</a></h2>
-                          <span class="byline">By&nbsp;{% for author in obj.authors %}<a href="{{ author.get_absolute_url }}">{{ author.author.name }}</a>, {% endfor %}</span>
-                          <span class="pubdate">{{ obj.updated_local|date:"N d" }} at {{ obj.updated_local|time:"h:i a" }}</span>
-                          <p class="description"></p>
-                      </td>
-                  </tr>
-                  {% endfor %}
-              </tbody>
-          </table>
-      {% endblock %}
-      <div id="footer" class="span-24 last" style="padding:10px 0; font-size:12px;">  
-            {% block footer %}
-            <center>Made with <a href="http://appengine.google.com/">Google App Engine</a> and scorn.</center>
-            {% endblock %}
-      </div>
-  </body>
-</html>
+  {% block headline %}
+   <h1>{{ author.name }} :: {{ headline|safe }} :: The Politico Firehose</h1>
+   <h3>{{ author.get_story_count }} stories since we've been tracking</h3>
+   <h4>Last story posted on {{ author.last_updated|date:"N d" }} at {{ author.last_updated|time:"h:i a" }}</h4>
+  {% endblock %}
+
+  {% block content %}
+      <table id="table_list" cellspacing="0">
+          <tbody>
+              {% for obj in author.get_story_list %}
+              <tr id="{{ obj.link }}">
+                  <td style="{% if not forloop.first %}border-top: 1px dotted gray;{% endif %}{% if forloop.last %}border-bottom: 1px dotted gray;{% endif %}">
+                      <h2><a target="_blank" class="headline" href="{{ obj.link }}">{{ obj|safe }}</a></h2>
+                      <span class="byline">
+                        By&nbsp;{{ obj.get_rendered_byline_html|safe }}
+                      </span>
+                      <span class="pubdate">{{ obj.updated_local|date:"N d" }} at {{ obj.updated_local|time:"h:i a" }}</span>
+                      <p class="description"></p>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  {% endblock %}
+
 

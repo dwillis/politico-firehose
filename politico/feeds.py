@@ -2,7 +2,7 @@ from politico.models import Story
 from django.contrib.syndication.feeds import Feed
 
 
-class LatestItems(Feed):
+class LatestStories(Feed):
     title = "Politico Firehose"
     link = "http://politico-firehose.appspot.com/"
     description = "The latest content churned out by Politico.com"

@@ -1,0 +1,23 @@
+<html>
+  <title>Politico Firehose</title>
+  <link href="/media/blueprint/screen.css" media="screen, projection", rel="stylesheet", type="text/css">
+  <link rel="alternate" type="application/rss+xml" 
+    title="Latest stories from the Politico Firehose" 
+    href="{% url feeds "latest" %}" />
+  <body>
+    <div class="container">
+        <hr>
+      <div class="span-24">
+      {% block headline %}
+      {% endblock %}
+
+      {% block content %}
+      {% endblock %}
+      <div id="footer" class="span-24 last" style="padding:10px 0; font-size:12px;">  
+            {% block footer %}
+            <center>Made with <a href="http://appengine.google.com/">Google App Engine</a> and scorn.</center>
+            {% endblock %}
+      </div>
+  </body>
+</html>
+

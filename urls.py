@@ -13,27 +13,29 @@
 # limitations under the License.
 
 # Views
-from politico.views import update_feed, fetch_feeds, index, byline_detail
+from politico import views
+from politico import tasks
 
 # Feeds
-from politico.feeds import LatestItems
-from django.contrib.syndication.views import feed
+from politico import feeds
+from django.contrib.syndication.views import feed as feed_view
 
 # Urls
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Homepage
-    url('^$', index),
+    url('^$', views.index),
     
     # Bylines
-    url('^bylines/(?P<slug>.*)/$', byline_detail),
+    url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds
-    url(r'^feeds/(?P<url>.*)/$', feed,
-        {'feed_dict': dict(latest=LatestItems) },
+    url(r'^feeds/(?P<url>.*)/$', feed_view,
+        {'feed_dict': dict(latest=feeds.LatestStories) },
         name='feeds'),
+    
     # Tasks
-    url('^_update_feed/$', update_feed),
-    url('^_update_all_feeds/$', fetch_feeds),
+    url('^_update_feed/$', tasks.update_feed),
+    url('^_update_all_feeds/$', tasks.fetch_feeds),
 )
