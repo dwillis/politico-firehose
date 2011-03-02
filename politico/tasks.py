@@ -36,12 +36,10 @@ def update_feed(request):
     url = request.GET['url']
     content = fetch(url).content
     d = feedparser.parse(StringIO.StringIO(content))
-    # Ready the db query object
-    story_query = Story.all()
-    author_query = Author.all()
     # Loop through all the items
     for entry in d.entries:
         # See if this link already exists
+        story_query = Story.all()
         story = story_query.filter('link =', entry.id).get()
         # And if it doesn't ...
         if not story:
@@ -51,8 +49,6 @@ def update_feed(request):
                 title = entry.title,
                 updated_date = datetime.fromtimestamp(time.mktime(entry.updated_parsed)), 
             )
-            # Save it
-            story.put()
             # Prep the authors
             authors = entry.author.split(',')
             author_keys = []
@@ -60,6 +56,8 @@ def update_feed(request):
             for author in authors:
                 # Check if the author already exists
                 this_slug = str(slugify(author))
+                if not this_slug:
+                    continue
                 a = Author.get_by_key_name(this_slug)
                 # If it does...
                 if a:
@@ -82,5 +80,6 @@ def update_feed(request):
                 author_keys.append(a.key())
             # Add the author keys to the story object
             story.bylines = author_keys
+            # Save the story
             story.put()
     return HttpResponse('ok!')
