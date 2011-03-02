@@ -18,6 +18,9 @@ class Author(BaseModel):
         
     def get_url(self):
         return "/bylines/%s" % self.slug
+
+    def updated_local(self):
+        return self.last_updated - timedelta(hours=5)
     
     def get_story_list(self):
         """
