@@ -1,9 +1,13 @@
-from appengine_django.models import BaseModel
-from google.appengine.ext import db
 from pytz.gae import pytz
 from datetime import timedelta
+from google.appengine.ext import db
+from appengine_django.models import BaseModel
+
 
 class Author(BaseModel):
+    """
+    A reporter who writes a story.
+    """
     name = db.StringProperty()
     slug = db.StringProperty()
     story_count = db.IntegerProperty()
@@ -18,7 +22,11 @@ class Author(BaseModel):
     def get_absolute_url(self):
         return "/bylines/%s" % self.slug
 
+
 class Story(BaseModel):
+    """
+    A story harvested from one of our feeds.
+    """
     title = db.StringProperty()
     link = db.StringProperty()
     updated_date = db.DateTimeProperty()
@@ -35,10 +43,13 @@ class Story(BaseModel):
         
     def author_list(self):
         return (x.author.name for x in self.authorstory_set)
-    
+
+
 class AuthorStory(BaseModel):
+    """
+    The many-to-many relationship bewtween Stories and Authors.
+    """
     author = db.ReferenceProperty(Author, required=True, collection_name="stories")
     story = db.ReferenceProperty(Story, required=True, collection_name="authors")
-    
 
-    
+
