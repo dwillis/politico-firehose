@@ -1,3 +1,6 @@
+# Utils
+from datetime import timedelta, datetime
+
 # Models
 from politico.models import Story, Author
 
@@ -28,6 +31,7 @@ def byline_detail(request, slug):
     context = {
         'author' : author,
         'headline': "Article Archive",
+        'now': datetime.now() - timedelta(hours=5)
     }
     return direct_to_template(request, 'byline_detail.html', context)
     
