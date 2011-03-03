@@ -17,7 +17,7 @@ class Author(BaseModel):
     def __unicode__(self):
         return self.name
         
-    def get_url(self):
+    def get_absolute_url(self):
         return "/bylines/%s" % self.slug
 
     def updated_local(self):
