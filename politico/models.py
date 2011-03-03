@@ -1,6 +1,7 @@
 from pytz.gae import pytz
 from datetime import timedelta
 from google.appengine.ext import db
+from google.appengine.api import taskqueue
 from appengine_django.models import BaseModel
 
 
@@ -25,12 +26,32 @@ class Author(BaseModel):
         """
         from politico.models import Story
         return Story.all().filter('bylines =', self.key()).order("-updated_date")
-
+    
     def get_story_count(self):
         """
         Count all the stories written by this Author.
         """
         return self.get_story_list().count()
+    
+    def get_display_story_count(self):
+        """
+        Pull the story count from the datastore with the fastest way available.
+        
+        Tries the `story_count` field first, but then falls back to a db query.
+        """
+        # If we have a count in the db, just use that
+        if self.story_count:
+            return self.story_count
+        # Otherwise...
+        else:
+            # Schedule a write of the latest count to the db
+            taskqueue.add(
+                    url = '/_update_story_count_for_author/',
+                    params = {'key' : i.key()},
+                    method='GET'
+            )
+            # And return the results of a live db hit.
+            return self.get_story_count()
 
 
 class Story(BaseModel):

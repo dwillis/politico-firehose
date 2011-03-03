@@ -1,8 +1,9 @@
 {% extends "base.html" %}
+{% load humanize %}
 
   {% block headline %}
    <h1>{{ author.name }} :: {{ headline|safe }} :: The Politico Firehose</h1>
-   <h3>{{ author.get_story_count }} stories since we've been tracking</h3>
+   <h3>{{ author.get_display_story_count|intcomma }} stories since we've been tracking</h3>
    <h4>Last story posted on {{ author.last_updated|date:"N d" }} at {{ author.last_updated|time:"h:i a" }}</h4>
   {% endblock %}
 
