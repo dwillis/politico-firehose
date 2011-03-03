@@ -89,7 +89,7 @@ class Story(BaseModel):
         author_list = self.get_byline_list()
         author_list.sort(key=lambda x: x.name)
         return get_text_list([
-            '<a href="%s">%s</a>' % (i.get_url(), i.name) for i in author_list
+            '<a href="%s">%s</a>' % (i.get_absolute_url(), i.name) for i in author_list
         ], 'and')
     
 
