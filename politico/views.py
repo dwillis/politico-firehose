@@ -34,6 +34,17 @@ def byline_detail(request, slug):
         'now': datetime.now() - timedelta(hours=5)
     }
     return direct_to_template(request, 'byline_detail.html', context)
-    
+
+
+def byline_scoreboard(request):
+    """
+    A ranking of the authors by number of bylines
+    """
+    object_list = Author.all().order("-story_count")
+    context = {
+        'object_list': object_list,
+    }
+    return direct_to_template(request, 'byline_scoreboard.html', context)
+
 
 
