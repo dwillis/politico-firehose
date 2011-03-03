@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+  {% block headline %}
+   <h1>Author Scoreboard :: The Politico Firehose</h1>
+   <h3>Who has written the most stories since we've been tracking</h3>
+  {% endblock %}
+
+  {% block content %}
+      <table id="table_list" cellspacing="0">
+          <tbody>
+              {% for obj in object_list %}
+              <tr id="{{ obj.link }}">
+                  <td style="{% if not forloop.first %}border-top: 1px dotted gray;{% endif %}{% if forloop.last %}border-bottom: 1px dotted gray;{% endif %}">
+                      <h2>{{ forloop.counter }}. <a target="_blank" class="headline" href="{{ obj.get_absolute_url }}">{{ obj|safe }} ({{ obj.story_count|intcomma }})</a></h2>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  {% endblock %}
+
+
