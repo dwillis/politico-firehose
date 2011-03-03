@@ -38,4 +38,8 @@ urlpatterns = patterns('',
     # Tasks
     url('^_update_feed/$', tasks.update_feed),
     url('^_update_all_feeds/$', tasks.fetch_feeds),
+    url('^_update_all_feeds/$', tasks.fetch_feeds),
+    url('^_update_story_count_for_author/$', tasks.update_story_count_for_author),
+    url('^_update_story_count_for_all_authors/$', 
+        tasks.update_story_count_for_all_authors),
 )
