@@ -61,7 +61,7 @@ def update_feed(request):
                 a = Author.get_by_key_name(this_slug)
                 # If it does...
                 if a:
-                    # Synce updates
+                    # Sync updates
                     if story.updated_date > a.last_updated:
                         a.last_updated = story.updated_date
                         a.put()
