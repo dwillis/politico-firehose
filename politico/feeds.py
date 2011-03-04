@@ -44,8 +44,11 @@ class AuthorFeeds(Feed):
         
     def items(self, obj):
         return obj.get_story_list().fetch(10)
-
-    def item_link(self, obj):
-        if not obj:
+    
+    def item_link(self, item):
+        if not item:
             raise FeedDoesNotExist
-        return obj.link
+        return item.link
+    
+    def item_pubdate(self, item):
+        return item.updated_date
