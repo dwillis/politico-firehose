@@ -5,6 +5,8 @@
   <link rel="alternate" type="application/rss+xml" 
     title="Latest stories from the Politico Firehose" 
     href="{% url feeds "latest" %}" />
+  {% block extra-rss %}
+  {% endblock %}
   <body>
     <div class="container">
         <hr>

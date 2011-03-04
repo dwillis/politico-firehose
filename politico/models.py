@@ -19,6 +19,9 @@ class Author(BaseModel):
         
     def get_absolute_url(self):
         return "/bylines/%s" % self.slug
+    
+    def get_feed_url(self):
+        return "/feeds/author/%s/" % self.slug
 
     def updated_local(self):
         return self.last_updated - timedelta(hours=5)

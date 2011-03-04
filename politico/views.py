@@ -47,4 +47,14 @@ def byline_scoreboard(request):
     return direct_to_template(request, 'byline_scoreboard.html', context)
 
 
+def feed_list(request):
+    """
+    A list of all the RSS feeds we provide.
+    """
+    object_list = Author.all().order("name")
+    context = {
+        'object_list': object_list,
+    }
+    return direct_to_template(request, 'feed_list.html', context)
+
 

@@ -32,8 +32,12 @@ urlpatterns = patterns('',
     url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds
+    url('^feeds/list/$', views.feed_list),
     url(r'^feeds/(?P<url>.*)/$', feed_view,
-        {'feed_dict': dict(latest=feeds.LatestStories) },
+        {'feed_dict': {
+            'latest': feeds.LatestStories,
+            'author': feeds.AuthorFeeds,
+        }},
         name='feeds'),
     
     # Tasks

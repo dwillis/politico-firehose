@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+  {% block headline %}
+   <h1>Feeds :: <a href="/">The Politico Firehose</a></h1>
+   <h3>RSS feeds for every author at Politico</h3>
+  {% endblock %}
+
+  {% block content %}
+      <table id="table_list" cellspacing="0">
+          <tbody>
+              {% for obj in object_list %}
+              <tr id="{{ obj.slug }}">
+                  <td class="bordertop {% if forloop.last %}borderbottom{% endif %}">
+                      <div class="item">
+                      <h2 style="display:inline;"><a target="_blank" class="headline" href="{{ obj.get_feed_url }}">{{ obj.name|safe }}</a></h2>
+                        <a target="_blank" style="float:right;" href="{{ obj.get_feed_url }}">
+                            <img style="display:inline;" src="{{ MEDIA_URL }}img/rss.gif">
+                        </a>
+                      </div>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  {% endblock %}
+
+
