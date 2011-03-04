@@ -11,8 +11,10 @@
           <tbody>
               {% for obj in object_list %}
               <tr id="{{ obj.link }}">
-                  <td style="{% if not forloop.first %}border-top: 1px dotted gray;{% endif %}{% if forloop.last %}border-bottom: 1px dotted gray;{% endif %}">
+                  <td class="bordertop {% if forloop.last %}borderbottom{% endif %}">
+                      <div class="item">
                       <h2>{{ forloop.counter }}. <a target="_blank" class="headline" href="{{ obj.get_absolute_url }}">{{ obj|safe }} ({{ obj.get_display_story_count|intcomma }})</a></h2>
+                      </div>
                   </td>
               </tr>
               {% endfor %}

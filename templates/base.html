@@ -8,18 +8,21 @@
   <body>
     <div class="container">
         <hr>
-      <div class="span-24">
-      {% block headline %}
-      {% endblock %}
+          <div class="span-24">
+          {% block headline %}
+          {% endblock %}
+          </div>
+          {% block content %}
+          {% endblock %}
+          <div id="footer" class="span-24 last" style="padding:10px 0; font-size:12px;">  
+                {% block footer %}
+                <center>Made with <a href="http://appengine.google.com/">Google App Engine</a> and scorn.</center>
+                <center>Questions/Comments? Send email to noisemachinedc at yahoo or find us on <a href="http://www.twitter.com/NoiseMachineDC">Twitter</a></center>
+                {% endblock %}
+          </div>
 
-      {% block content %}
-      {% endblock %}
-      <div id="footer" class="span-24 last" style="padding:10px 0; font-size:12px;">  
-            {% block footer %}
-            <center>Made with <a href="http://appengine.google.com/">Google App Engine</a> and scorn.</center>
-            <center>Questions/Comments? Send email to noisemachinedc at yahoo or find us on <a href="http://www.twitter.com/NoiseMachineDC">Twitter</a></center>
-            {% endblock %}
-      </div>
+    </div>
+      
   </body>
 </html>
 
