@@ -1,1 +1,1 @@
-body {}
+tbody tr:nth-child(even) td, tbody tr.even td {background-color:white;}
