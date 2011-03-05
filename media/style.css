@@ -1,7 +1,44 @@
 h1 {font-size:36px;}
 h2 {font-size:24px; margin-bottom:3px}
-a { text-decoration:none;}
+a { text-decoration:none; color:#1B70B3;}
 tbody tr:nth-child(even) td, tbody tr.even td {background-color:white;}
 div.item {padding:10px 0;}
 .bordertop {border-top: 1px dotted gray;}
 .borderbottom {border-bottom: 1px dotted gray;}
+#header ul {
+    padding: 0;
+    margin: 5px 0 15px 0;
+    background-color: #1B70B3;
+    color: #fff;
+    float: left;
+    width: 100%;
+}
+#header li {
+ line-height:160%;
+ font-family: Verdana;
+ font-size:12px;
+ text-transform: uppercase;
+ display: inline;
+ list-style-type: none;
+}
+#header li.unselected a {
+  padding: .25em 1em;
+  background-color: #1B70B3;
+  color: #fff;
+  text-decoration: none;
+  float: left;
+  border-right: solid 1px #fff;
+}
+#header li.selected a {
+  padding: .25em 1em;
+  background-color: #fff;
+  color: #000;
+  text-decoration: none;
+  float: left;
+  border-right: solid 1px #fff;
+}
+#header li a:hover {
+    color: #000;
+    background-color: #fff;
+}
+

@@ -25,14 +25,15 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Homepage
-    url('^$', views.index),
+    url('^$', views.index, name="index"),
     
     # Bylines
-    url('^bylines/scoreboard/$', views.byline_scoreboard),
+    url('^bylines/scoreboard/$', views.byline_scoreboard,
+        name="bylines-scoreboard"),
     url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds
-    url('^feeds/list/$', views.feed_list),
+    url('^feeds/list/$', views.feed_list, name="feeds-list"),
     url(r'^feeds/(?P<url>.*)/$', feed_view,
         {'feed_dict': {
             'latest': feeds.LatestStories,

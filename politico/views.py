@@ -17,6 +17,7 @@ def index(request):
     context = {
         'headline': "Winning the present",
         'object_list': latest_stories,
+        'selected': 'index',
     }
     return direct_to_template(request, 'index.html', context)
 
@@ -31,7 +32,8 @@ def byline_detail(request, slug):
     context = {
         'author' : author,
         'headline': "Article Archive",
-        'now': datetime.now() - timedelta(hours=5)
+        'now': datetime.now() - timedelta(hours=5),
+        'selected': 'byline_scoreboard',
     }
     return direct_to_template(request, 'byline_detail.html', context)
 
@@ -43,6 +45,7 @@ def byline_scoreboard(request):
     object_list = Author.all().order("-story_count")
     context = {
         'object_list': object_list,
+        'selected': 'byline_scoreboard',
     }
     return direct_to_template(request, 'byline_scoreboard.html', context)
 
@@ -54,6 +57,7 @@ def feed_list(request):
     object_list = Author.all().order("name")
     context = {
         'object_list': object_list,
+        'selected': 'feed_list',
     }
     return direct_to_template(request, 'feed_list.html', context)
 
