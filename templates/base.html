@@ -11,9 +11,10 @@
     <div class="container">
           <div id="header">
              <ul>
-                <li class="{% ifequal selected 'index' %}selected{% else %}unselected{% endifequal %}"><a href="{% url index %}">The latest</a></li>
+                <li class="{% ifequal selected 'index' %}selected{% else %}unselected{% endifequal %}"><a href="{% url index %}">Winning the present</a></li>
                 <li class="{% ifequal selected 'byline_scoreboard' %}selected{% else %}unselected{% endifequal %}"><a href="{% url bylines-scoreboard %}">Byline scoreboard</a></li>
-                <li class="{% ifequal selected 'feed_list' %}selected{% else %}unselected{% endifequal %}"><a href="{% url feeds-list %}">Feeds</a></li>
+                <li class="{% ifequal selected 'byline_list' %}selected{% else %}unselected{% endifequal %}"><a href="{% url bylines-list %}">Byline archives</a></li>
+                <li class="{% ifequal selected 'feed_list' %}selected{% else %}unselected{% endifequal %}"><a href="{% url feeds-list %}">Byline Feeds</a></li>
              </ul>
           </div>
           <div id="headline" class="span-24">

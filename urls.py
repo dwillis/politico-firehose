@@ -30,6 +30,8 @@ urlpatterns = patterns('',
     # Bylines
     url('^bylines/scoreboard/$', views.byline_scoreboard,
         name="bylines-scoreboard"),
+    url('^bylines/list/$', views.byline_list,
+        name="bylines-list"),
     url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds

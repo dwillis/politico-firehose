@@ -2,6 +2,7 @@ h1 {font-size:36px;}
 h2 {font-size:24px; margin-bottom:3px}
 a { text-decoration:none; color:#1B70B3;}
 tbody tr:nth-child(even) td, tbody tr.even td {background-color:white;}
+div.rss-wrapper {float:right; line-height:36px; margin-top:10px;}
 div.item {padding:10px 0;}
 .bordertop {border-top: 1px dotted gray;}
 .borderbottom {border-bottom: 1px dotted gray;}

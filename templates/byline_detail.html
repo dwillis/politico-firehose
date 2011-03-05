@@ -8,14 +8,13 @@
   {% endblock %}
 
   {% block headline %}
-   <div style="float:right;">
+   <div class="rss-wrapper">
         <a href="{{ author.get_feed_url }}">
             <img src="{{ MEDIA_URL }}img/rss.gif">
         </a>
     </div>
-   <h1>{{ author.name }} :: {{ headline|safe }} :: <a href="/">The Politico Firehose</a></h1>
-   <h3>{{ author.get_display_story_count|intcomma }} stories since we've been tracking</h3>
-   <h4>Last story posted on {{ author.updated_local|date:"N d" }} at {{ author.updated_local|time:"h:i a" }}</h4>
+   <h1>{{ author.name }} :: Byline Archive :: <a href="/">The Politico Firehose</a></h1>
+   <h3>{{ author.get_display_story_count|intcomma|apnumber|capfirst }} stories since we've been tracking. Last story posted on {{ author.updated_local|date:"N d" }} at {{ author.updated_local|time:"h:i a" }}</h4>
   {% endblock %}
 
   {% block content %}
