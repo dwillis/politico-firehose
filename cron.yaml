@@ -2,3 +2,7 @@ cron:
 - description: update all Politico feeds
   url: /_update_all_feeds/
   schedule: every 15 minutes
+
+- description: update all Politico feeds
+  url: /_update_hourly_stats/
+  schedule: every 20 minutes
