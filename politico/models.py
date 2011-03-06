@@ -100,7 +100,7 @@ class HourlyStats(BaseModel):
         template = """
         {% load charts %}
             {% chart %}
-                {% chart-title 'Total bylines by hour' %}
+                {% chart-title 'Total stories by hour' %}
                 {% chart-data values %}
                 {% chart-size "950x250" %}
                 {% chart-type "column" %}
