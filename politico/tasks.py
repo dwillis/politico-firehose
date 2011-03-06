@@ -7,13 +7,14 @@ import StringIO
 
 # Models
 from google.appengine.ext import db
-from politico.models import Story, Author
+from politico.models import Story, Author, HourlyStats
 
 # Etc.
 import time
 import logging
 from datetime import datetime
 from django.http import HttpResponse
+from django.utils import simplejson
 from django.template.defaultfilters import slugify
 
 
@@ -140,3 +141,23 @@ def update_story_count_for_all_authors(request):
         method='GET'
     ) for i in Author.all()]
     return HttpResponse('ok!')
+
+
+def update_hourly_stats(request):
+    """
+    Group stories by hour and record the totals in the database.
+    """
+    qs = Story.all().order("-updated_date")
+    data_dict = {}
+    for obj in qs:
+        this_hour = obj.updated_local().hour
+        try:
+            data_dict[this_hour] += 1
+        except KeyError:
+            data_dict[this_hour] = 1
+    data_json = simplejson.dumps(data_dict)
+    logging.info("Creating a new HourlyStats record")
+    obj = HourlyStats(creation_datetime=datetime.now(), data=data_json)
+    obj.put()
+    return HttpResponse('ok!')
+

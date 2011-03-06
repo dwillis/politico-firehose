@@ -2,7 +2,7 @@
 from datetime import timedelta, datetime
 
 # Models
-from politico.models import Story, Author
+from politico.models import Story, Author, HourlyStats
 
 # Responses
 from django.http import Http404, HttpResponse
@@ -47,6 +47,18 @@ def byline_scoreboard(request):
         'selected': 'byline_scoreboard',
     }
     return direct_to_template(request, 'byline_scoreboard.html', context)
+
+
+def byline_stats(request):
+    """
+    Statistics about Politico bylines
+    """
+    hourly_stats = HourlyStats.all().order("-creation_datetime").get()
+    context = {
+        'hourly_stats': hourly_stats,
+        'selected': 'byline_stats',
+    }
+    return direct_to_template(request, 'byline_stats.html', context)
 
 
 def byline_list(request):

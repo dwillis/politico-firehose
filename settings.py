@@ -106,6 +106,7 @@ INSTALLED_APPS = (
      'toolbox',
      'search',
      'politico',
+     'googlecharts',
 )
 
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

@@ -32,6 +32,8 @@ urlpatterns = patterns('',
         name="bylines-scoreboard"),
     url('^bylines/list/$', views.byline_list,
         name="bylines-list"),
+    url('^bylines/stats/$', views.byline_stats,
+        name="bylines-stats"),
     url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds
@@ -50,4 +52,5 @@ urlpatterns = patterns('',
     url('^_update_story_count_for_author/$', tasks.update_story_count_for_author),
     url('^_update_story_count_for_all_authors/$', 
         tasks.update_story_count_for_all_authors),
+    url('^_update_hourly_stats/$', tasks.update_hourly_stats),
 )
