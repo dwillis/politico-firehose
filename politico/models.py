@@ -50,7 +50,7 @@ class Author(BaseModel):
             # Schedule a write of the latest count to the db
             taskqueue.add(
                     url = '/_update_story_count_for_author/',
-                    params = {'key' : i.key()},
+                    params = {'key' : self.key()},
                     method='GET'
             )
             # And return the results of a live db hit.
