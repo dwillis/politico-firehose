@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 
   {% block headline %}
-   <div style="float:right;">
+   <div class="rss-wrapper">
         <a href="{% url feeds "latest" %}">
             <img src="{{ MEDIA_URL }}img/rss.gif">
         </a>
     </div>
    <h1>{{ headline|safe }} :: The Politico Firehose</h1>
+   <h3>The latest stories published by Politico</h3>
   {% endblock %}
 
   {% block content %}

@@ -25,15 +25,24 @@ from django.conf.urls.defaults import *
 
 urlpatterns = patterns('',
     # Homepage
-    url('^$', views.index),
+    url('^$', views.index, name="index"),
     
     # Bylines
-    url('^bylines/scoreboard/$', views.byline_scoreboard),
+    url('^bylines/scoreboard/$', views.byline_scoreboard,
+        name="bylines-scoreboard"),
+    url('^bylines/list/$', views.byline_list,
+        name="bylines-list"),
+    url('^bylines/stats/$', views.byline_stats,
+        name="bylines-stats"),
     url('^bylines/(?P<slug>.*)/$', views.byline_detail),
     
     # RSSy Feeds
+    url('^feeds/list/$', views.feed_list, name="feeds-list"),
     url(r'^feeds/(?P<url>.*)/$', feed_view,
-        {'feed_dict': dict(latest=feeds.LatestStories) },
+        {'feed_dict': {
+            'latest': feeds.LatestStories,
+            'author': feeds.AuthorFeeds,
+        }},
         name='feeds'),
     
     # Tasks
@@ -43,4 +52,5 @@ urlpatterns = patterns('',
     url('^_update_story_count_for_author/$', tasks.update_story_count_for_author),
     url('^_update_story_count_for_all_authors/$', 
         tasks.update_story_count_for_all_authors),
+    url('^_update_hourly_stats/$', tasks.update_hourly_stats),
 )

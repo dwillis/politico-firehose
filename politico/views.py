@@ -2,7 +2,7 @@
 from datetime import timedelta, datetime
 
 # Models
-from politico.models import Story, Author
+from politico.models import Story, Author, HourlyStats
 
 # Responses
 from django.http import Http404, HttpResponse
@@ -17,6 +17,7 @@ def index(request):
     context = {
         'headline': "Winning the present",
         'object_list': latest_stories,
+        'selected': 'index',
     }
     return direct_to_template(request, 'index.html', context)
 
@@ -30,8 +31,8 @@ def byline_detail(request, slug):
         raise Http404
     context = {
         'author' : author,
-        'headline': "Article Archive",
-        'now': datetime.now() - timedelta(hours=5)
+        'now': datetime.now() - timedelta(hours=5),
+        'selected': 'byline_list',
     }
     return direct_to_template(request, 'byline_detail.html', context)
 
@@ -43,8 +44,44 @@ def byline_scoreboard(request):
     object_list = Author.all().order("-story_count")
     context = {
         'object_list': object_list,
+        'selected': 'byline_scoreboard',
     }
     return direct_to_template(request, 'byline_scoreboard.html', context)
 
+
+def byline_stats(request):
+    """
+    Statistics about Politico bylines
+    """
+    hourly_stats = HourlyStats.all().order("-creation_datetime").get()
+    context = {
+        'hourly_stats': hourly_stats,
+        'selected': 'byline_stats',
+    }
+    return direct_to_template(request, 'byline_stats.html', context)
+
+
+def byline_list(request):
+    """
+    A list of all the Authors we have archived.
+    """
+    object_list = Author.all().order("name")
+    context = {
+        'object_list': object_list,
+        'selected': 'byline_list',
+    }
+    return direct_to_template(request, 'byline_list.html', context)
+
+
+def feed_list(request):
+    """
+    A list of all the RSS feeds we provide.
+    """
+    object_list = Author.all().order("name")
+    context = {
+        'object_list': object_list,
+        'selected': 'feed_list',
+    }
+    return direct_to_template(request, 'feed_list.html', context)
 
 

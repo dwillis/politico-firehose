@@ -5,24 +5,34 @@
   <link rel="alternate" type="application/rss+xml" 
     title="Latest stories from the Politico Firehose" 
     href="{% url feeds "latest" %}" />
+  {% block extra-rss %}
+  {% endblock %}
   <body>
     <div class="container">
-        <hr>
-          <div class="span-24">
+          <div id="header">
+             <ul>
+                <li class="{% ifequal selected 'index' %}selected{% else %}unselected{% endifequal %}"><a href="{% url index %}">Winning the present</a></li>
+                <li class="{% ifequal selected 'byline_scoreboard' %}selected{% else %}unselected{% endifequal %}"><a href="{% url bylines-scoreboard %}">Byline scoreboard</a></li>
+                <li class="{% ifequal selected 'byline_stats' %}selected{% else %}unselected{% endifequal %}"><a href="{% url bylines-stats %}">Byline statistics</a></li>
+                <li class="{% ifequal selected 'byline_list' %}selected{% else %}unselected{% endifequal %}"><a href="{% url bylines-list %}">Byline archives</a></li>
+                <li class="{% ifequal selected 'feed_list' %}selected{% else %}unselected{% endifequal %}"><a href="{% url feeds-list %}">Byline Feeds</a></li>
+             </ul>
+          </div>
+          <div id="headline" class="span-24">
           {% block headline %}
           {% endblock %}
           </div>
+          <div id="content" class="span-24">
           {% block content %}
           {% endblock %}
+          </div>
           <div id="footer" class="span-24 last" style="padding:10px 0; font-size:12px;">  
                 {% block footer %}
                 <center>Made with <a href="http://appengine.google.com/">Google App Engine</a> and scorn.</center>
                 <center>Questions/Comments? Send email to noisemachinedc at yahoo or find us on <a href="http://www.twitter.com/NoiseMachineDC">Twitter</a></center>
                 {% endblock %}
           </div>
-
     </div>
-      
   </body>
 </html>
 

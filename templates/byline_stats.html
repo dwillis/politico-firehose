@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+  {% block headline %}
+   <h1>Byline Statistics :: <a href="/">The Politico Firehose</a></h1>
+   <h3>Analysis of Politico bylines since we've been tracking</h3>
+  {% endblock %}
+
+  {% block content %}
+        {{ hourly_stats.get_chart_html|safe }}
+  {% endblock %}
+
+

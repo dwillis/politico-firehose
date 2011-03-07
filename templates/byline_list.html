@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+  {% block headline %}
+   <h1>Byline Archives :: <a href="/">The Politico Firehose</a></h1>
+   <h3>Stories published by every author at Politico</h3>
+  {% endblock %}
+
+  {% block content %}
+      <table id="table_list" cellspacing="0">
+          <tbody>
+              {% for obj in object_list %}
+              <tr id="{{ obj.slug }}">
+                  <td class="bordertop {% if forloop.last %}borderbottom{% endif %}">
+                      <div class="item">
+                      <h2 style="display:inline;"><a target="_blank" class="headline" href="{{ obj.get_absolute_url }}">
+                            {{ obj.name|safe }} ({{ obj.get_display_story_count|intcomma }})
+                      </a></h2>
+                      </div>
+                  </td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+  {% endblock %}
+
+

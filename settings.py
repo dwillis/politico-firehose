@@ -16,7 +16,7 @@
 
 import os
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -106,6 +106,7 @@ INSTALLED_APPS = (
      'toolbox',
      'search',
      'politico',
+     'googlecharts',
 )
 
 #SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
