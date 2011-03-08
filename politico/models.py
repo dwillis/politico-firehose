@@ -107,6 +107,89 @@ class Story(BaseModel):
 # Stats
 #
 
+class DailyStats(BaseModel):
+    """
+    A breakdown of how many stories have been published in day of the week.
+    
+    Data are stores as a JSON object that can be easily analyzed and reused.
+    """
+    creation_datetime = db.DateTimeProperty()
+    data = db.TextProperty()
+    
+    def get_data_dict(self):
+        """
+        Return JSON data stored in the object as a Python dictionary
+        """
+        return simplejson.loads(self.data)
+    
+    def get_sorted_data_list(self):
+        """
+        Return JSON data as a list of tuples sorted from midnight to 11pm.
+        
+        The first item in each tuple is the hour, the second is the story
+        count.
+        """
+        data_dict = self.get_data_dict()
+        # Convert it to a list of tuples, with the keys as ints
+        data_list = [(int(k), v) for k,v in data_dict.items()]
+        # Sort by the keys, a.k.a. the hours
+        data_list.sort(key=lambda x:x[0])
+        # Pass it out
+        return data_list
+    
+    def get_chart_html(self):
+        """
+        Return a Google chart displaying the daily distribution as a bar chart.
+        """
+        # Pull the data
+        data_list = self.get_sorted_data_list()
+        # Split the story counts from the hours, maintaining their order
+        values = [i[1] for i in data_list]
+        label_list = ['Mon.', 'Tues.', 'Wed.', 'Thurs.', 'Fri.', 'Sat.', 'Sun.']
+        labels = [label_list[i[0]] for i in data_list]
+        # Configure the labels that run at the top of each column.
+        point_labels = [(
+           "number", "*0s*", "000000", i, 13, 1, "e::5"
+           ) for i in range(0, len(values)+1)]
+        # Set the scale for the chart based on the max value
+        data_scale = "%s,%s" % (0, max(values)*1.2)
+        # Stuff all of the data into a dictionary for use in the template
+        kwargs = dict(
+            values=values,
+            labels=labels,
+            point_labels=point_labels,
+            data_scale=data_scale,
+            style="747170,14,0,t,ffffff",
+            colors="|".join(['1B70B3' for i in range(0, len(values))]),
+        )
+        # Slot all of the settings into the google chart maker templatetag.
+        template = """
+        {% load charts %}
+            {% chart %}
+                {% chart-title 'Total stories by day' %}
+                {% chart-data values %}
+                {% chart-size "600x250" %}
+                {% chart-type "column" %}
+                {% chart-bar-width 50 10 30 %}
+                {% data-point-labels 0 point_labels %}
+                {% axis "bottom" %}
+                    {% axis-style style %}
+                    {% axis-labels labels %}
+                {% endaxis %}
+                {% axis "left" %}
+                    {% axis-style "ffffff,10,0,t,ffffff" %}
+                {% endaxis %}
+                {% chart-data-scale data_scale %}
+                {% chart-colors colors %}
+            {% endchart %}
+        """
+        # Render the templatetag as HTML
+        cxt = Context(kwargs)
+        html = Template(template).render(cxt)
+        # Pass it out
+        return html
+
+
 class HourlyStats(BaseModel):
     """
     A breakdown of how many stories have been published in each hour of the 

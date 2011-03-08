@@ -7,7 +7,7 @@ import StringIO
 
 # Models
 from google.appengine.ext import db
-from politico.models import Story, Author, HourlyStats
+from politico.models import Story, Author, HourlyStats, DailyStats
 
 # Etc.
 import time
@@ -158,6 +158,25 @@ def update_hourly_stats(request):
     data_json = simplejson.dumps(data_dict)
     logging.info("Creating a new HourlyStats record")
     obj = HourlyStats(creation_datetime=datetime.now(), data=data_json)
+    obj.put()
+    return HttpResponse('ok!')
+
+
+def update_daily_stats(request):
+    """
+    Group stories by day of the week and record the totals in the database.
+    """
+    qs = Story.all().order("-updated_date")
+    data_dict = {}
+    for obj in qs:
+        this_weekday = obj.updated_local().weekday()
+        try:
+            data_dict[this_weekday] += 1
+        except KeyError:
+            data_dict[this_weekday] = 1
+    data_json = simplejson.dumps(data_dict)
+    logging.info("Creating a new DailyStats record")
+    obj = DailyStats(creation_datetime=datetime.now(), data=data_json)
     obj.put()
     return HttpResponse('ok!')
 

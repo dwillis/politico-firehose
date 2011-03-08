@@ -8,6 +8,12 @@
 
   {% block content %}
         {{ hourly_stats.get_chart_html|safe }}
+
+        <div style="margin-top:20px;">
+        <center>
+            {{ daily_stats.get_chart_html|safe }}
+        </center>
+        </div>
   {% endblock %}
 
 

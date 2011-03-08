@@ -53,4 +53,5 @@ urlpatterns = patterns('',
     url('^_update_story_count_for_all_authors/$', 
         tasks.update_story_count_for_all_authors),
     url('^_update_hourly_stats/$', tasks.update_hourly_stats),
+    url('^_update_daily_stats/$', tasks.update_daily_stats),
 )
