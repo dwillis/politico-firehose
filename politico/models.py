@@ -230,7 +230,7 @@ class HourlyStats(BaseModel):
         labels = [i[0] for i in data_list]
         # Configure the labels that run at the top of each column.
         point_labels = [(
-           "number", "*0s*", "000000", i, 13, 1, "e::5"
+           "number", "*0s*", "000000", i, 11, 1, "e::5"
            ) for i in range(0, len(values)+1)]
         # Set the scale for the chart based on the max value
         data_scale = "%s,%s" % (0, max(values)*1.2)
@@ -251,7 +251,7 @@ class HourlyStats(BaseModel):
                 {% chart-data values %}
                 {% chart-size "950x250" %}
                 {% chart-type "column" %}
-                {% chart-bar-width 30 10 10 %}
+                {% chart-bar-width 22 10 10 %}
                 {% data-point-labels 0 point_labels %}
                 {% axis "bottom" %}
                     {% axis-style style %}
