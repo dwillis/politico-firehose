@@ -15,6 +15,7 @@ import logging
 from datetime import datetime
 from django.http import HttpResponse
 from django.utils import simplejson
+from politico.models import ANALYSIS_STARTDATE
 from django.template.defaultfilters import slugify
 
 
@@ -137,6 +138,34 @@ def update_story_count_for_all_authors(request):
     logging.info("Updating story count for all Authors")
     [taskqueue.add(
         url = '/_update_story_count_for_author/',
+        params = {'key' : i.key()},
+        method='GET'
+    ) for i in Author.all()]
+    return HttpResponse('ok!')
+
+
+def update_daily_average_for_author(request):
+    """
+    Update the daily average for an Author.
+    
+    Pass in the key of the object as a GET param.
+    """
+    obj = get_key_or_none(request)
+    if not obj:
+        raise Http404
+    logging.debug("Updating daily average for Author %s" % obj)
+    obj.daily_average = obj.get_daily_average()
+    obj.put()
+    return HttpResponse('ok!')
+
+
+def update_daily_average_for_all_authors(request):
+    """
+    Updates the daily average for all Authors.
+    """
+    logging.info("Updating daily average for all Authors")
+    [taskqueue.add(
+        url = '/_update_daily_average_for_author/',
         params = {'key' : i.key()},
         method='GET'
     ) for i in Author.all()]

@@ -13,5 +13,10 @@ indexes:
 - kind: Story
   properties:
   - name: bylines
+  - name: update_date
+
+- kind: Story
+  properties:
+  - name: bylines
   - name: updated_date
     direction: desc

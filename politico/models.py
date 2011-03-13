@@ -4,11 +4,13 @@ from google.appengine.api import taskqueue
 from appengine_django.models import BaseModel
 
 # Et cetera
+from datetime import datetime
 from datetime import timedelta
 from django.utils import simplejson
 from django.utils.text import get_text_list
 from django.template import Template, Context
 
+ANALYSIS_STARTDATE = datetime(2011, 3, 10)
 
 #
 # Stories
@@ -21,6 +23,7 @@ class Author(BaseModel):
     name = db.StringProperty()
     slug = db.StringProperty()
     story_count = db.IntegerProperty()
+    daily_average = db.FloatProperty()
     last_updated = db.DateTimeProperty()
     
     def __unicode__(self):
@@ -47,6 +50,17 @@ class Author(BaseModel):
         Count all the stories written by this Author.
         """
         return self.get_story_list().count()
+    
+    def get_daily_average(self):
+        """
+        Average how many stories this author has posted per day since
+        our global ANALYSIS_STARTDATE
+        """
+        from politico.models import Story
+        obj_list = Story.all().filter('bylines =', self.key())
+        obj_list = obj_list.filter("update_date >=", ANALYSIS_STARTDATE)
+        date_diff = (datetime.now() - ANALYSIS_STARTDATE).days
+        return obj_list.count() / float(date_diff)
     
     def get_display_story_count(self):
         """
