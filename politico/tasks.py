@@ -13,8 +13,9 @@ from politico.models import Story, Author, HourlyStats, DailyStats
 import time
 import logging
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils import simplejson
+from politico.models import ANALYSIS_STARTDATE
 from django.template.defaultfilters import slugify
 
 
@@ -143,11 +144,39 @@ def update_story_count_for_all_authors(request):
     return HttpResponse('ok!')
 
 
+def update_daily_average_for_author(request):
+    """
+    Update the daily average for an Author.
+    
+    Pass in the key of the object as a GET param.
+    """
+    obj = get_key_or_none(request)
+    if not obj:
+        raise Http404
+    logging.debug("Updating daily average for Author %s" % obj)
+    obj.daily_average = obj.get_daily_average()
+    obj.put()
+    return HttpResponse('ok!')
+
+
+def update_daily_average_for_all_authors(request):
+    """
+    Updates the daily average for all Authors.
+    """
+    logging.info("Updating daily average for all Authors")
+    [taskqueue.add(
+        url = '/_update_daily_average_for_author/',
+        params = {'key' : i.key()},
+        method='GET'
+    ) for i in Author.all()]
+    return HttpResponse('ok!')
+
+
 def update_hourly_stats(request):
     """
     Group stories by hour and record the totals in the database.
     """
-    qs = Story.all().order("-updated_date")
+    qs = Story.all().filter("updated_date >=", ANALYSIS_STARTDATE).order("-updated_date")
     data_dict = {}
     for obj in qs:
         this_hour = obj.updated_local().hour
@@ -166,7 +195,7 @@ def update_daily_stats(request):
     """
     Group stories by day of the week and record the totals in the database.
     """
-    qs = Story.all().order("-updated_date")
+    qs = Story.all().filter("updated_date >=", ANALYSIS_STARTDATE).order("-updated_date")
     data_dict = {}
     for obj in qs:
         this_weekday = obj.updated_local().weekday()

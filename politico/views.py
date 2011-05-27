@@ -1,5 +1,6 @@
 # Utils
 from datetime import timedelta, datetime
+from models import ANALYSIS_STARTDATE
 
 # Models
 from politico.models import Story, Author, HourlyStats, DailyStats
@@ -13,7 +14,9 @@ def index(request):
     """
     The homepage.
     """
-    latest_stories = Story.all().order('-updated_date').fetch(25)
+    qs = Story.all()
+    stories = qs.filter("updated_date >=", ANALYSIS_STARTDATE)
+    latest_stories = stories.order('-updated_date').fetch(25)
     context = {
         'headline': "Winning the present",
         'object_list': latest_stories,
