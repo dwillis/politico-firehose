@@ -13,7 +13,7 @@ from politico.models import Story, Author, HourlyStats, DailyStats
 import time
 import logging
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils import simplejson
 from politico.models import ANALYSIS_STARTDATE
 from django.template.defaultfilters import slugify
@@ -176,7 +176,7 @@ def update_hourly_stats(request):
     """
     Group stories by hour and record the totals in the database.
     """
-    qs = Story.all().order("-updated_date")
+    qs = Story.all().filter("updated_date >=", ANALYSIS_STARTDATE).order("-updated_date")
     data_dict = {}
     for obj in qs:
         this_hour = obj.updated_local().hour
@@ -195,7 +195,7 @@ def update_daily_stats(request):
     """
     Group stories by day of the week and record the totals in the database.
     """
-    qs = Story.all().order("-updated_date")
+    qs = Story.all().filter("updated_date >=", ANALYSIS_STARTDATE).order("-updated_date")
     data_dict = {}
     for obj in qs:
         this_weekday = obj.updated_local().weekday()

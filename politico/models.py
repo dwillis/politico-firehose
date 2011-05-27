@@ -10,7 +10,7 @@ from django.utils import simplejson
 from django.utils.text import get_text_list
 from django.template import Template, Context
 
-ANALYSIS_STARTDATE = datetime(2011, 3, 10)
+ANALYSIS_STARTDATE = datetime(2011, 4, 1)
 
 #
 # Stories
@@ -40,14 +40,16 @@ class Author(BaseModel):
     
     def get_story_list(self):
         """
-        Get all the stories written by this author
+        Get all the stories written by this author since ANALYSIS_STARTDATE.
         """
         from politico.models import Story
-        return Story.all().filter('bylines =', self.key()).order("-updated_date")
+        bylines = Story.all().filter('bylines =', self.key())
+        bylines = bylines.filter("updated_date >=", ANALYSIS_STARTDATE)
+        return bylines.order("-updated_date")
     
     def get_story_count(self):
         """
-        Count all the stories written by this Author.
+        Count all the stories written by this Author since ANALYSIS_STARTDATE.
         """
         return self.get_story_list().count()
     
